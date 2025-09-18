@@ -1,0 +1,9 @@
+PUT http://localhost:8080/events/1
+
+
+{
+    "name": "John Gibson 1-updated",
+    "description": "A test description 1-updated",
+    "location": "A test location 1-updated",
+    "datetime": "2026-10-10T12:00:00Z"
+}
