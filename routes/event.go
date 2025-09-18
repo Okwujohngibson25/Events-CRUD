@@ -1,11 +1,13 @@
 package routes
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/okwu-john/webapi/models"
+	"github.com/okwu-john/webapi/utils"
 )
 
 func getEvents(c *gin.Context) {
@@ -18,6 +20,7 @@ func getEvents(c *gin.Context) {
 }
 
 func createEvent(c *gin.Context) {
+
 	token := c.Request.Header.Get("Authorization")
 
 	if token == "" {
@@ -25,16 +28,23 @@ func createEvent(c *gin.Context) {
 		return
 	}
 
+	userid, err := utils.VerifyToken(token)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"message": "unauthorized access", "err": err.Error(), "token": token})
+		return
+	}
+
 	var event models.Event
 
-	event.ID = 1
-	event.UserID = 1
+	fmt.Println("userid from token:", userid)
 
-	err := c.ShouldBindJSON(&event)
+	err = c.ShouldBindJSON(&event)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"message": "Binding incomming request to my struct var didnt work", "error": err.Error()})
 		return
 	}
+
+	event.UserID = userid
 
 	err = event.SaveEvents()
 	if err != nil {

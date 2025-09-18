@@ -37,7 +37,7 @@ func (u User) Createuser() error {
 	return err
 }
 
-func (u User) Validateuserlogin() error {
+func (u *User) Validateuserlogin() error {
 	query := `
 	SELECT id, password FROM users WHERE email = ?
 	`

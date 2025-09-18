@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -39,6 +40,7 @@ func loginuser(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Password validating failed"})
 		return
 	}
+	fmt.Println("User ID before generating token:", newUser.ID)
 
 	token, err := utils.GenerateToken(newUser.Email, newUser.ID)
 	if err != nil {
