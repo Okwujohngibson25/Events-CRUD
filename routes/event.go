@@ -1,7 +1,6 @@
 package routes
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -23,8 +22,6 @@ func createEvent(c *gin.Context) {
 	userid := c.GetInt64("userid")
 
 	var event models.Event
-
-	fmt.Println("userid from token:", userid)
 
 	err := c.ShouldBindJSON(&event)
 	if err != nil {
@@ -66,9 +63,16 @@ func updateEvent(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"messgae": "could not pass event to ID"})
 		return
 	}
-	_, err = models.GetEventById(eventId)
+	userid := c.GetInt64("userid")
+
+	event, err := models.GetEventById(eventId)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"messgae": "could find event", "error": err})
+		return
+	}
+
+	if event.UserID != userid {
+		c.JSON(http.StatusUnauthorized, gin.H{"message": "Not Authrorized to update event"})
 		return
 	}
 
@@ -98,10 +102,16 @@ func deleteEvents(c *gin.Context) {
 		return
 
 	}
+	userid := c.GetInt64("userid")
 
-	_, err = models.GetEventById(eventID)
+	event, err := models.GetEventById(eventID)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "Couldnt find an Event with Passed in ID"})
+		return
+	}
+
+	if event.UserID != userid {
+		c.JSON(http.StatusUnauthorized, gin.H{"message": "Not Authrorized to Delete event"})
 		return
 	}
 
