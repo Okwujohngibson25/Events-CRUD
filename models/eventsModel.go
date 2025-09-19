@@ -1,6 +1,8 @@
 package models
 
 import (
+	"database/sql"
+	"fmt"
 	"time"
 
 	"github.com/okwu-john/webapi/db"
@@ -75,6 +77,9 @@ func GetEventById(id int64) (*Event, error) {
 
 	err := row.Scan(&event.ID, &event.Name, &event.Description, &event.Location, &event.DateTime, &event.UserID)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, fmt.Errorf("event not found")
+		}
 		return nil, err
 	}
 
@@ -117,6 +122,35 @@ func DeleteEvents(id int64) error {
 		panic("couldnt delete event from db")
 	}
 
+	return err
+
+}
+
+func (e Event) Register(userId int64) error {
+	query := "INSERT INTO registration (event_id, user_id) VALUES (?, ?)"
+
+	stmt, err := db.DB.Prepare(query)
+	if err != nil {
+		return err
+	}
+
+	defer stmt.Close()
+
+	_, err = stmt.Exec(e.ID, userId)
+	return err
+}
+
+func (e Event) Cancelreg(userId int64) error {
+	query := "DELETE FROM registration WHERE user_id = ? and event_id = ?"
+
+	stmt, err := db.DB.Prepare(query)
+	if err != nil {
+		return err
+	}
+
+	defer stmt.Close()
+
+	_, err = stmt.Exec(e.ID, userId)
 	return err
 
 }
