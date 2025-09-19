@@ -1,11 +1,10 @@
 POST http://localhost:8080/events
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QyQHNpdGUuY29tIiwiZXhwIjoxNzU4MjQ1MDIyLCJ1c2VySWQiOjJ9.f411bEJwXNRlKjQ-KoEekur0GK0Ptq58WKef-ccx8IE
-
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QyQHNpdGUuY29tIiwiZXhwIjoxNzU4MjQ3NzA4LCJ1c2VySWQiOjJ9.jJlPUNWyVSsWFZ5msv-_356Lqv5gwzxRE9Tx1hKW3QY
 
 
 {
-    "Name": "7th Event by user 2",
+    "Name": "8th Event by user 2",
     "Description": "Desc 2",
     "Location": "Location 2",
     "DateTime": "2025-10-10T12:00:00Z"
